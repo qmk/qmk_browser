@@ -1,4 +1,4 @@
-# QMK Keyboards
+# QMK Keyboard Browser
 
 ## Development
 
