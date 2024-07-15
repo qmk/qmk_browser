@@ -1,0 +1,33 @@
+name: Generate Site
+
+on:
+  push:
+    branches:
+    - main
+
+  pull_request:
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 20
+
+    - name: Build Site
+      run: |
+        yarn install
+        yarn build
+
+    - name: Deploy
+      if: ${{ github.event_name != 'pull_request' }}
+      uses: JamesIves/github-pages-deploy-action@v4.5.0
+      with:
+        branch: gh-pages
+        folder: dist
+        git-config-name: QMK Bot
+        git-config-email: hello@qmk.fm
