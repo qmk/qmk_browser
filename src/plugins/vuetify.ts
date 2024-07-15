@@ -13,5 +13,13 @@ export default createVuetify({
   },
   theme: {
     defaultTheme: 'dark',
+    themes: {
+      dark: {
+        colors: {
+          background: 'rgb(27, 27, 31)',
+          surface: 'rgb(22, 22, 24)',
+        },
+      },
+    },
   },
 })
