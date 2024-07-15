@@ -18,6 +18,7 @@ export default createVuetify({
         colors: {
           background: 'rgb(27, 27, 31)',
           surface: 'rgb(22, 22, 24)',
+          primary: 'rgb(62, 99, 221)',
         },
       },
     },
