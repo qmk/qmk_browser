@@ -18,13 +18,13 @@
     <v-data-table-virtual fixed-header disable-sort height="calc(100vh - 23em)" :loading="!isFinished" :search="search"
       :headers="virtual_headers" :items="virtual_keyboards" item-value="keyboard">
       <template #[`item.keyboard`]="{ item }">
-        <v-btn variant="plain" :to="`/keyboard/${item.keyboard}`">{{ item.keyboard }}</v-btn>
+        <v-btn variant="text" :to="`/keyboard/${item.keyboard}`">{{ item.keyboard }}</v-btn>
       </template>
       <template #[`item.folder`]="{ item }">
-        <v-btn variant="plain" icon="fa-brands fa-github" :href="item.folder" />
+        <v-btn variant="text" icon="fa-brands fa-github" :href="item.folder" />
       </template>
       <template #[`item.firmware`]="{ item }">
-        <v-btn variant="plain" icon="fa-solid fa-download" :href="item.firmware" v-if="item.firmware" />
+        <v-btn variant="text" icon="fa-solid fa-download" :href="item.firmware" v-if="item.firmware" />
       </template>
     </v-data-table-virtual>
 

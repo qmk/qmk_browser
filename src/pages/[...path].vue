@@ -5,7 +5,7 @@
     </template>
 
     <template v-slot:actions>
-      <v-btn to="/">Return home</v-btn>
+      <v-btn color="primary" to="/">Return home</v-btn>
     </template>
 
     <template v-slot:media>
