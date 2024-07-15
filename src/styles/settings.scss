@@ -1,0 +1,19 @@
+// 'fix' scrollbar always showing
+html {
+  overflow-y: auto;
+}
+
+code {
+  background-color: rgb(var(--v-theme-code));
+  color: rgb(var(--v-theme-on-code));
+  padding: 0.2em 0.4em;
+}
+
+pre > code {
+  display: inline-block;
+  width: 100%;
+  padding: 1.5em;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  overflow-x: auto;
+}

@@ -1,0 +1,44 @@
+{
+  "name": "qmk_browser",
+  "description": "QMK Keyboard Browser",
+  "repository": "git@github.com:qmk/qmk_browser.git",
+  "author": "QMK <hello@qmk.fm>",
+  "license": "MIT",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "vue-tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "lint": "eslint . --fix --ignore-path .gitignore"
+  },
+  "dependencies": {
+    "@vueuse/core": "^10.11.0",
+    "core-js": "^3.34.0",
+    "roboto-fontface": "*",
+    "vue": "^3.4.21",
+    "vue3-shortkey": "^4.0.0",
+    "vuetify": "^3.5.8"
+  },
+  "devDependencies": {
+    "@babel/types": "^7.24.0",
+    "@fortawesome/fontawesome-free": "^6.5.2",
+    "@types/node": "^20.11.25",
+    "@vitejs/plugin-vue": "^5.0.4",
+    "@vue/eslint-config-typescript": "^13.0.0",
+    "eslint": "^8.57.0",
+    "eslint-config-standard": "^17.1.0",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-n": "^16.6.2",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^6.1.1",
+    "eslint-plugin-vue": "^9.22.0",
+    "sass": "^1.71.7 <=1.77.6",
+    "typescript": "^5.4.2",
+    "unplugin-fonts": "^1.1.1",
+    "unplugin-vue-components": "^0.26.0",
+    "unplugin-vue-router": "^0.8.4",
+    "vite": "^5.1.5",
+    "vite-plugin-vuetify": "^2.0.3",
+    "vue-router": "^4.3.0",
+    "vue-tsc": "^2.0.6"
+  }
+}

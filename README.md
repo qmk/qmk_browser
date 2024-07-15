@@ -1,2 +1,15 @@
-# qmk_browser
-QMK Keyboard Browser
+# QMK Keyboards
+
+## Development
+
+```
+yarn install
+```
+
+```
+yarn dev
+```
+
+```
+yarn build && npx serve dist
+```
