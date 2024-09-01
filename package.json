@@ -14,7 +14,7 @@
     "@vueuse/core": "^10.11.0",
     "core-js": "^3.34.0",
     "roboto-fontface": "*",
-    "vue": "^3.4.37",
+    "vue": "^3.4.38",
     "vue3-shortkey": "^4.0.0",
     "vuetify": "^3.5.8"
   },
