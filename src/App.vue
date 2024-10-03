@@ -20,7 +20,9 @@
     </v-app-bar>
 
     <v-main>
-      <router-view :key="$route.fullPath" />
+      <suspense>
+        <router-view :key="$route.fullPath" />
+      </suspense>
     </v-main>
 
     <v-footer app class="text-center d-flex flex-column" :elevation="2">
