@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@vueuse/core": "^10.11.0",
-    "core-js": "^3.34.0",
+    "core-js": "^3.40.0",
     "roboto-fontface": "*",
     "vue": "^3.5.10",
     "vue3-shortkey": "^4.0.0",
