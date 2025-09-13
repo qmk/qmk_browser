@@ -3,7 +3,7 @@
     <v-app-bar :elevation="2">
       <template v-slot:prepend>
         <v-fab-transition>
-          <v-img v-if="$route.path == '/'" src="@/assets/logo.svg" height="32px" width="48px" />
+          <v-img v-if="$route.path == '/'" :src="`qmk-logo-${mode}.svg`" height="32px" width="48px" position="right"/>
           <v-btn v-else to="/" icon="fa-solid fa-arrow-left" />
         </v-fab-transition>
       </template>
