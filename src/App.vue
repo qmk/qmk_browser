@@ -38,9 +38,9 @@ import { useTheme } from "vuetify";
 const theme = useTheme();
 const mode = useColorMode({
   onChanged: (mode) => {
-    theme.global.name.value = mode;
+    theme.change(mode);
   },
 });
 
-theme.global.name.value = mode.value;
+theme.change(mode.value);
 </script>

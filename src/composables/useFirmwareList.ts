@@ -4,7 +4,7 @@ import { CI_BASE_URL } from '@/constants'
 export const useFirmwareList = createGlobalState(async () => {
   return await useFetch(`${CI_BASE_URL}/firmware_list.json`, {
     afterFetch(ctx) {
-      const ret: Record<string, any> = {};
+      const ret: Record<string, Record<string,string>> = {};
       for (const filename of ctx.data.files) {
         // TODO: handle non-default firmware files
         const safe_kb = filename.split('_default')[0];
