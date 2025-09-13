@@ -9,7 +9,7 @@
     </p>
 
     <div class="d-flex flex-column flex-sm-row">
-      <v-text-field v-shortkey="['ctrl', 'f']" @shortkey="focus_search" ref="search_field" density="comfortable"
+      <v-text-field ref="search_field" density="comfortable"
         class="py-2" v-model="search" label="Search" prepend-inner-icon="fa-solid fa-search" variant="outlined"
         hide-details single-line clearable/>
     </div>
@@ -34,6 +34,7 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue';
 import { useRoute } from 'vue-router';
+import { useHotkey } from 'vuetify';
 
 import { useKeyboardList } from '@/composables/useKeyboardList'
 import { useFirmwareList } from '@/composables/useFirmwareList'
@@ -46,9 +47,9 @@ const { data: keyboard_list, isFinished } = await useKeyboardList();
 const search_field = ref<HTMLDivElement>();
 const search = ref(route.query.search as string)
 
-const focus_search = () => {
+useHotkey('ctrl+f', () => {
   search_field.value?.focus();
-};
+});
 
 const virtual_headers = [
   { title: 'Keyboard', key: 'keyboard', align: 'start', width: '70%' },
