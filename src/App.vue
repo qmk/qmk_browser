@@ -12,7 +12,7 @@
 
       <template v-slot:append>
         <v-switch class="d-none d-sm-flex" inset true-icon="fa-regular fa-moon" false-icon="fa-regular fa-sun"
-          true-value="dark" false-value="light" v-model="mode" />
+          true-value="dark" false-value="light" theme="light" v-model="mode" />
           <v-divider class="mx-2 my-4 d-none d-md-flex" vertical />
         <v-btn class="d-none d-md-flex" size="small" href="https://discord.gg/qmk" icon="fa-brands fa-discord" />
         <v-btn class="d-none d-md-flex" size="small" href="https://github.com/qmk/qmk_browser" icon="fa-brands fa-github" />
