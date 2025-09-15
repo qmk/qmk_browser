@@ -4,16 +4,15 @@
       <v-banner-text>
         <h1>{{ config.keyboard_name }}</h1>
       </v-banner-text>
-
-      <template v-slot:actions>
-        <div class="hidden-sm-and-down">
-        <v-btn class="ma-2 align-self-end" color="primary" variant="elevated" prepend-icon="fa-brands fa-github"
-        :href="`https://github.com/qmk/qmk_firmware/tree/master/keyboards/${kb_path}`">QMK</v-btn>
-        <v-btn class="ma-2 align-self-end" color="orange" variant="elevated" prepend-icon="fa-solid fa-download"
-        :href="firmware_files[fm_name].url" v-if="firmware_files[fm_name]?.url">Firmware</v-btn>
-        </div>
-      </template>
     </v-banner>
+
+    <v-row no-gutters class="py-4">
+      <v-spacer/>
+      <v-btn class="ml-4" color="primary" variant="elevated" prepend-icon="fa-brands fa-github"
+        :href="`https://github.com/qmk/qmk_firmware/tree/master/keyboards/${kb_path}`">QMK</v-btn>
+      <v-btn class="ml-4" color="orange" variant="elevated" prepend-icon="fa-solid fa-download"
+        :href="firmware_files[fm_name].url" v-if="firmware_files[fm_name]?.url">Firmware</v-btn>
+    </v-row>
 
     <!-- TODO: actual keyboard image -->
     <div class="text-center">

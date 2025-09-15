@@ -15,7 +15,7 @@
     </div>
 
     <!-- @vue-expect-error header[].align causing ts errors -->
-    <v-data-table-virtual fixed-header disable-sort height="calc(100vh - 23em)" :loading="!isFinished" :search="search"
+    <v-data-table-virtual fixed-header disable-sort height="calc(100vh - 23em)" :loading="!isFinished" :search="search" striped="even"
       :headers="virtual_headers" :items="virtual_keyboards" item-value="keyboard">
       <template #[`item.keyboard`]="{ item }">
         <v-btn variant="text" :to="`/keyboard/${item.keyboard}`">{{ item.keyboard }}</v-btn>
@@ -34,12 +34,13 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue';
 import { useRoute } from 'vue-router';
-import { useHotkey } from 'vuetify';
+import { useHotkey, useDisplay } from 'vuetify';
 
 import { useKeyboardList } from '@/composables/useKeyboardList'
 import { useFirmwareList } from '@/composables/useFirmwareList'
 
 const route = useRoute();
+const { smAndDown:mobile } = useDisplay()
 
 const { data: firmware_files } = await useFirmwareList()
 const { data: keyboard_list, isFinished } = await useKeyboardList();
@@ -51,11 +52,19 @@ useHotkey('ctrl+f', () => {
   search_field.value?.focus();
 });
 
-const virtual_headers = [
-  { title: 'Keyboard', key: 'keyboard', align: 'start', width: '70%' },
-  { title: 'QMK Folder', key: 'folder', align: 'center', width: '15%' },
-  { title: 'Firmware', key: 'firmware', align: 'center', width: '15%' }
-]
+const virtual_headers = computed(() => {
+  if (mobile.value) {
+    return [
+      { title: 'Keyboard', key: 'keyboard' }
+    ];
+  } else {
+    return  [
+      { title: 'Keyboard', key: 'keyboard', align: 'start', width: '80%' },
+      { title: 'QMK Folder', key: 'folder', align: 'center', width: '10%' },
+      { title: 'Firmware', key: 'firmware', align: 'center', width: '10%' }
+    ];
+  }
+});
 
 const virtual_keyboards = computed<{keyboard: string, firmware: string, folder: string}[]>(() => {
   return keyboard_list.value.map((kb: string) => {
@@ -67,7 +76,7 @@ const virtual_keyboards = computed<{keyboard: string, firmware: string, folder: 
       folder: `https://github.com/qmk/qmk_firmware/tree/master/keyboards/${kb}`
     }
   });
-})
+});
 </script>
 
 <style lang="scss">
