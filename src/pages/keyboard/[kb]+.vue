@@ -1,6 +1,6 @@
 <template>
   <v-container v-if="config">
-    <v-banner lines="one" bg-color="transparent">
+    <v-banner bg-color="transparent">
       <v-banner-text>
         <h1>{{ config.keyboard_name }}</h1>
       </v-banner-text>
