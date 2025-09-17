@@ -111,11 +111,13 @@ useHotkey('ctrl+f', () => {
 
 const resetFilter = () => {
   tags.value = [];
+  features.value = [];
   layouts.value = [];
+  converters.value = [];
 };
 
 const filter_count = computed(() => {
-  return tags.value.length + layouts.value.length;
+  return tags.value.length + features.value.length + layouts.value.length + converters.value.length;
 });
 
 const virtual_headers = computed(() => {
