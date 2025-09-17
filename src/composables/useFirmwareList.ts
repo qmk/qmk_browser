@@ -1,13 +1,20 @@
-import { useFetch, createGlobalState } from '@vueuse/core';
+import { useFetch, UseFetchReturn, createGlobalState } from '@vueuse/core';
 import { CI_BASE_URL } from '@/constants'
 
-export const useFirmwareList = createGlobalState(async () => {
-  return await useFetch(`${CI_BASE_URL}/firmware_list.json`, {
+export type FirmwareItem = {
+  url: string,
+  filename: string,
+};
+
+export type FirmwareList = Record<string, FirmwareItem>;
+
+export const useFirmwareList = createGlobalState((): UseFetchReturn<FirmwareList> & PromiseLike<UseFetchReturn<FirmwareList>> => {
+  return useFetch(`${CI_BASE_URL}/firmware_list.json`, {
     afterFetch(ctx) {
-      const ret: Record<string, Record<string,string>> = {};
+      const ret: FirmwareList = {};
       for (const filename of ctx.data.files) {
         // TODO: handle non-default firmware files
-        const safe_kb = filename.split('_default')[0];
+        const safe_kb: string = filename.split('_default.')[0];
         ret[safe_kb] = {
           url: `${CI_BASE_URL}/${filename}`,
           filename,
