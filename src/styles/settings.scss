@@ -1,3 +1,7 @@
+@use 'vuetify/settings' with (
+  $navigation-drawer-scrim-opacity: 0.5
+);
+
 // 'fix' scrollbar always showing
 html {
   overflow-y: auto;
