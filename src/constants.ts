@@ -16,6 +16,15 @@ export const KEYBOARD_TAGS = [
     "split",
 ];
 
+export const KEYBOARD_FEATURES = [
+    "audio",
+    "backlight",
+    "encoder",
+    "led_matrix",
+    "rgb_matrix",
+    "rgblight",
+];
+
 export const KEYBOARD_LAYOUTS = [
     '60_abnt2',
     '60_ansi',

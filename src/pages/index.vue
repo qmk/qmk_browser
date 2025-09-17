@@ -31,14 +31,26 @@
 
         <v-list-item>
           <v-list-item-title>Tags</v-list-item-title>
-          <v-list-item-subtitle>something something description of stuff</v-list-item-subtitle>
+          <v-list-item-subtitle>Generated metadata describing the keyboard.</v-list-item-subtitle>
           <v-select class="py-2" :items="KEYBOARD_TAGS" chips multiple clearable density="comfortable" v-model="tags"/>
         </v-list-item>
 
         <v-list-item>
+          <v-list-item-title>Features</v-list-item-title>
+          <v-list-item-subtitle>Software/hardware features enabled by the keyboard.</v-list-item-subtitle>
+          <v-select class="py-2" :items="KEYBOARD_FEATURES" chips multiple clearable density="comfortable" v-model="features"/>
+        </v-list-item>
+
+        <v-list-item>
           <v-list-item-title>Layouts</v-list-item-title>
-          <v-list-item-subtitle>something something description of stuff</v-list-item-subtitle>
+          <v-list-item-subtitle>Community layouts supported by the keyboard.</v-list-item-subtitle>
           <v-select class="py-2" :items="KEYBOARD_LAYOUTS" chips multiple clearable density="comfortable" v-model="layouts"/>
+        </v-list-item>
+
+        <v-list-item>
+          <v-list-item-title>Converters</v-list-item-title>
+          <v-list-item-subtitle>Supports drop-in replacement controllers.</v-list-item-subtitle>
+          <v-select class="py-2" :items="['promicro', 'elite_c']" chips multiple clearable density="comfortable" v-model="converters"/>
         </v-list-item>
 
         <v-list-item>
@@ -71,7 +83,7 @@ import { useRoute } from 'vue-router';
 import { refDebounced } from '@vueuse/core'
 import { useHotkey, useDisplay } from 'vuetify';
 
-import { KEYBOARD_TAGS, KEYBOARD_LAYOUTS } from '@/constants'
+import { KEYBOARD_TAGS, KEYBOARD_FEATURES, KEYBOARD_LAYOUTS } from '@/constants'
 
 import { useKeyboards } from '@/composables/useKeyboards'
 import { useFirmwareList } from '@/composables/useFirmwareList'
@@ -89,7 +101,9 @@ const search_debounced = refDebounced(search, 250);
 
 const drawer = ref(false)
 const tags = ref([])
+const features = ref([])
 const layouts = ref([])
+const converters = ref([])
 
 useHotkey('ctrl+f', () => {
   search_field.value?.focus();
@@ -127,7 +141,9 @@ const virtual_keyboards = computed<{keyboard: string, firmware: string, folder: 
 
   const terms: string[] = [
     ...tags.value.map((x) => `tags:"${x}"`),
+    ...features.value.map((x) => `features.${x}:true`),
     ...layouts.value.map((x) => `community_layouts:"${x}"`),
+    ...converters.value.map((x) => `pin_compatible:"${x}"`),
     search_debounced.value ? `keyboard_folder:"${search_debounced.value.toLowerCase()}"` : ''
   ];
 
