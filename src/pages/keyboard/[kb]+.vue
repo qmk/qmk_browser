@@ -11,7 +11,7 @@
       <v-btn class="ml-4" color="primary" variant="elevated" prepend-icon="fa-brands fa-github"
         :href="`https://github.com/qmk/qmk_firmware/tree/master/keyboards/${kb_path}`">QMK</v-btn>
       <v-btn class="ml-4" color="orange" variant="elevated" prepend-icon="fa-solid fa-download"
-        :href="firmware_files[fm_name].url" v-if="firmware_files[fm_name]?.url">Firmware</v-btn>
+        :href="firmware_files![fm_name].url" v-if="firmware_files![fm_name].url">Firmware</v-btn>
     </v-row>
 
     <!-- TODO: actual keyboard image -->
