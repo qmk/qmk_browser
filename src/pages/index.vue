@@ -32,13 +32,13 @@
         <v-list-item>
           <v-list-item-title>Tags</v-list-item-title>
           <v-list-item-subtitle>something something description of stuff</v-list-item-subtitle>
-          <v-combobox class="py-2" :items="KEYBOARD_TAGS" chips multiple clearable density="comfortable" v-model="tags"/>
+          <v-select class="py-2" :items="KEYBOARD_TAGS" chips multiple clearable density="comfortable" v-model="tags"/>
         </v-list-item>
 
         <v-list-item>
           <v-list-item-title>Layouts</v-list-item-title>
           <v-list-item-subtitle>something something description of stuff</v-list-item-subtitle>
-          <v-combobox class="py-2" :items="KEYBOARD_LAYOUTS" chips multiple clearable density="comfortable" v-model="layouts"/>
+          <v-select class="py-2" :items="KEYBOARD_LAYOUTS" chips multiple clearable density="comfortable" v-model="layouts"/>
         </v-list-item>
 
         <v-list-item>
