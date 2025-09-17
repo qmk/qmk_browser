@@ -13,7 +13,8 @@
       class="py-2" v-model="search" label="Search" prepend-inner-icon="fa-solid fa-search" variant="outlined"
       hide-details single-line clearable/>
       <v-spacer></v-spacer>
-      <v-btn class="my-2" size="large" variant="tonal" prepend-icon="fa-solid fa-filter" @click="drawer=true" :disabled="!isFinished">Filter
+      <v-btn class="my-2" size="large" variant="tonal" prepend-icon="fa-solid fa-filter" @click="drawer=true" :disabled="!isFinished">
+        <span v-if="!mobile">Filter</span>
         <template v-slot:append v-if="filter_count">
           <v-badge
             color="orange"
