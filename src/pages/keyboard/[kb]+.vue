@@ -9,9 +9,9 @@
     <v-row no-gutters class="py-4">
       <v-spacer/>
       <v-btn class="ml-4" color="primary" variant="elevated" prepend-icon="fa-brands fa-github"
-        :href="`https://github.com/qmk/qmk_firmware/tree/master/keyboards/${kb_path}`">QMK</v-btn>
+        :href="`https://github.com/qmk/qmk_firmware/tree/master/keyboards/${keyboard}`">QMK</v-btn>
       <v-btn class="ml-4" color="orange" variant="elevated" prepend-icon="fa-solid fa-download"
-        :href="firmware_files![fm_name].url" v-if="firmware_files![fm_name].url">Firmware</v-btn>
+        :href="url" v-if="url">Firmware</v-btn>
     </v-row>
 
     <!-- TODO: actual keyboard image -->
@@ -34,10 +34,10 @@
     </ul> -->
   
     <h2>Make example for this keyboard (after setting up your build environment):</h2>
-    <pre><code>qmk compile -kb {{ kb_path }} -km default</code></pre>
+    <pre><code>qmk compile -kb {{ keyboard }} -km default</code></pre>
 
     <h2>Flashing example for this keyboard:</h2>
-    <pre><code>qmk flash -kb {{ kb_path }} -km default</code></pre>
+    <pre><code>qmk flash -kb {{ keyboard }} -km default</code></pre>
 
     <p class="my-2">
       See the
@@ -70,24 +70,24 @@
 import { computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
-import { useKeyboardConfig } from '@/composables/useKeyboardConfig'
-import { useFirmwareList } from '@/composables/useFirmwareList'
+import { useKeyboardConfig } from '@/composables/useKeyboardConfig';
+import { useFirmwareList, toFirmwareListKey } from '@/composables/useFirmwareList';
 
 const route = useRoute();
 const router = useRouter();
 
-const kb_path = computed(() => {
+const keyboard = computed(() => {
   return (route.params.kb as string[]).join('/');
 });
 
-const fm_name = computed(() => {
-  return kb_path.value.replaceAll('/', '_');
+const url = computed(() => {
+  return firmwareFiles.value![toFirmwareListKey(keyboard.value)].url;
 });
 
-const { data: firmware_files } = await useFirmwareList()
-const { data: config, error } = await useKeyboardConfig(kb_path.value);
+const { data: firmwareFiles } = await useFirmwareList();
+const { data: config, error } = await useKeyboardConfig(keyboard.value);
 
 if (error.value) {
-  router.push('/404')
+  router.push('/404');
 }
 </script>

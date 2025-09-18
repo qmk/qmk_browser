@@ -1,5 +1,5 @@
 import { useFetch, UseFetchReturn, createGlobalState } from '@vueuse/core';
-import { CI_BASE_URL } from '@/constants'
+import { CI_BASE_URL } from '@/constants';
 
 export type FirmwareItem = {
   url: string,
@@ -14,8 +14,8 @@ export const useFirmwareList = createGlobalState((): UseFetchReturn<FirmwareList
       const ret: FirmwareList = {};
       for (const filename of ctx.data.files) {
         // TODO: handle non-default firmware files
-        const safe_kb: string = filename.split('_default.')[0];
-        ret[safe_kb] = {
+        const key: string = filename.split('_default.')[0];
+        ret[key] = {
           url: `${CI_BASE_URL}/${filename}`,
           filename,
         };
@@ -25,3 +25,7 @@ export const useFirmwareList = createGlobalState((): UseFetchReturn<FirmwareList
     },
   }).get().json();
 });
+
+export const toFirmwareListKey = (keyboard: string) => {
+  return keyboard.replaceAll('/', '_');
+};

@@ -9,23 +9,23 @@
     </p>
 
     <v-row no-gutters>
-      <v-text-field ref="search_field" density="comfortable" min-width="50%"
+      <v-text-field ref="searchField" density="comfortable" min-width="50%"
       class="py-2" v-model="search" label="Search" prepend-inner-icon="fa-solid fa-search" variant="outlined"
       hide-details single-line clearable/>
       <v-spacer></v-spacer>
       <v-btn class="my-2" size="large" variant="tonal" prepend-icon="fa-solid fa-filter" @click="drawer=true" :disabled="!isFinished">
         <span v-if="!mobile">Filter</span>
-        <template v-slot:append v-if="filter_count">
+        <template v-slot:append v-if="filterCount">
           <v-badge
             color="orange"
-            :content="filter_count"
+            :content="filterCount"
             inline
           ></v-badge>
         </template>
       </v-btn>
     </v-row>
 
-    <v-navigation-drawer width="400" temporary v-model="drawer" :location="$vuetify.display.mobile ? 'bottom' : 'right'">
+    <v-navigation-drawer width="650" temporary v-model="drawer" :location="$vuetify.display.mobile ? 'bottom' : 'right'">
       <v-list>
         <v-list-subheader>Filters</v-list-subheader>
 
@@ -61,8 +61,8 @@
 
     <v-sheet border>
       <!-- @vue-expect-error header[].align causing ts errors -->
-      <v-data-table-virtual color="red" fixed-header disable-sort height="calc(100vh - 23em)" :loading="!isFinished" striped="even"
-        :headers="virtual_headers" :items="virtual_keyboards" item-value="keyboard">
+      <v-data-table-virtual fixed-header disable-sort height="calc(100vh - 23em)" :loading="!isFinished" striped="even"
+        :headers="virtualHeaders" :items="virtualKeyboards" item-value="keyboard">
         <template #[`item.keyboard`]="{ item }">
           <v-btn variant="text" :to="`/keyboard/${item.keyboard}`">{{ item.keyboard }}</v-btn>
         </template>
@@ -80,33 +80,34 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue';
 import { useRoute } from 'vue-router';
-import { refDebounced } from '@vueuse/core'
+import { refDebounced } from '@vueuse/core';
 import { useHotkey, useDisplay } from 'vuetify';
+import { filter as liqe_filter, parse as liqe_parse } from 'liqe';
 
-import { KEYBOARD_TAGS, KEYBOARD_FEATURES, KEYBOARD_LAYOUTS } from '@/constants'
+import { KEYBOARD_TAGS, KEYBOARD_FEATURES, KEYBOARD_LAYOUTS } from '@/constants';
 
-import { useKeyboards } from '@/composables/useKeyboards'
-import { useFirmwareList } from '@/composables/useFirmwareList'
+import { useKeyboards } from '@/composables/useKeyboards';
+import { useFirmwareList, toFirmwareListKey } from '@/composables/useFirmwareList';
 
 const route = useRoute();
-const { smAndDown:mobile } = useDisplay()
+const { smAndDown:mobile } = useDisplay();
 
-const { data: firmware_files } = await useFirmwareList()
-const { data: keyboards, isFinished } = useKeyboards()
+const { data: firmwareFiles } = await useFirmwareList();
+const { data: keyboards, isFinished } = useKeyboards();
 
-const search_field = ref<HTMLDivElement>();
-const search = ref(route.query.search as string)
+const searchField = ref();
+const search = ref(route.query.search as string);
 
-const search_debounced = refDebounced(search, 250);
+const searchDebounced = refDebounced(search, 250);
 
-const drawer = ref(false)
-const tags = ref([])
-const features = ref([])
-const layouts = ref([])
-const converters = ref([])
+const drawer = ref(false);
+const tags = ref([]);
+const features = ref([]);
+const layouts = ref([]);
+const converters = ref([]);
 
 useHotkey('ctrl+f', () => {
-  search_field.value?.focus();
+  searchField.value?.focus();
 });
 
 const resetFilter = () => {
@@ -116,28 +117,26 @@ const resetFilter = () => {
   converters.value = [];
 };
 
-const filter_count = computed(() => {
+const filterCount = computed(() => {
   return tags.value.length + features.value.length + layouts.value.length + converters.value.length;
 });
 
-const virtual_headers = computed(() => {
+const virtualHeaders = computed(() => {
   if (mobile.value) {
     return [
-      { title: 'Keyboard', key: 'keyboard' }
+      { title: 'Keyboard', key: 'keyboard' },
     ];
   } else {
     return  [
       { title: 'Keyboard', key: 'keyboard', align: 'start', width: '80%' },
       { title: 'QMK Folder', key: 'folder', align: 'center', width: '10%' },
-      { title: 'Firmware', key: 'firmware', align: 'center', width: '10%' }
+      { title: 'Firmware', key: 'firmware', align: 'center', width: '10%' },
     ];
   }
 });
 
-import { filter as liqe_filter, parse as liqe_parse } from 'liqe';
-
-const virtual_keyboards = computed<{keyboard: string, firmware: string, folder: string}[]>(() => {
-  if(!keyboards.value || !firmware_files.value) {
+const virtualKeyboards = computed<{keyboard: string, firmware: string, folder: string}[]>(() => {
+  if(!keyboards.value || !firmwareFiles.value) {
     return [];
   }
 
@@ -146,23 +145,21 @@ const virtual_keyboards = computed<{keyboard: string, firmware: string, folder: 
     ...features.value.map((x) => `features.${x}:true`),
     ...layouts.value.map((x) => `community_layouts:"${x}"`),
     ...converters.value.map((x) => `pin_compatible:"${x}"`),
-    search_debounced.value ? `keyboard_folder:"${search_debounced.value.toLowerCase()}"` : ''
+    searchDebounced.value ? `keyboard_folder:"${searchDebounced.value.toLowerCase()}"` : '',
   ];
 
-  const search_string = terms.join(' ');
-  const found = search_string ? liqe_filter(liqe_parse(search_string), Object.values(keyboards.value)) : Object.values(keyboards.value);
+  const search = terms.join(' ');
+  const found = search ? liqe_filter(liqe_parse(search), Object.values(keyboards.value)) : Object.values(keyboards.value);
 
-  return found.map((kb_info) => {
-    const kb = kb_info.keyboard_folder;
-    const kb_safe = kb.replaceAll('/', '_');
-
-    const fm = firmware_files.value![kb_safe];
+  return found.map((info) => {
+    const kb = info.keyboard_folder;
+    const fm = firmwareFiles.value![toFirmwareListKey(kb)];
 
     return {
       keyboard: kb,
       firmware: fm.url ?? '',
-      folder: `https://github.com/qmk/qmk_firmware/tree/master/keyboards/${kb}`
-    }
+      folder: `https://github.com/qmk/qmk_firmware/tree/master/keyboards/${kb}`,
+    };
   });
 });
 </script>

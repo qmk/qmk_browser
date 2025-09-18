@@ -1,5 +1,5 @@
 import { useFetch, UseFetchReturn, createGlobalState } from '@vueuse/core';
-import { API_BASE_URL } from '@/constants'
+import { API_BASE_URL } from '@/constants';
 
 export type Keyboard = {
     keyboard_folder: string,
@@ -15,13 +15,13 @@ export const useKeyboards = createGlobalState((): UseFetchReturn<KeyboardMap> & 
     return useFetch(`${API_BASE_URL}/keyboards.json`, {
 
         afterFetch(ctx) {
-            let keyboards: KeyboardMap = ctx.data.keyboards;
+            const keyboards: KeyboardMap = ctx.data.keyboards;
 
             Object.values(keyboards).forEach((kb) => {
-                let tags = new Set(kb.tags ?? []);
+                const tags = new Set(kb.tags ?? []);
 
                 Object.keys(kb.layouts).forEach((layout) => {
-                    for (let token of ['ortho', 'ansi', 'iso', '60', '65', '75', '96', 'alice', 'fullsize', 'tkl', 'numpad']) {
+                    for (const token of ['ortho', 'ansi', 'iso', '60', '65', '75', '96', 'alice', 'fullsize', 'tkl', 'numpad']) {
                         if (layout.includes(token)) {
                             tags.add(token);
                         }
@@ -29,7 +29,7 @@ export const useKeyboards = createGlobalState((): UseFetchReturn<KeyboardMap> & 
                 });
 
                 if ('split' in kb) {
-                    tags.add('split')
+                    tags.add('split');
                 }
 
                 kb.community_layouts = kb.community_layouts ?? [];
