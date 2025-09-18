@@ -25,32 +25,24 @@
       </v-btn>
     </v-row>
 
-    <v-navigation-drawer width="650" temporary v-model="drawer" :location="$vuetify.display.mobile ? 'bottom' : 'right'">
+    <v-navigation-drawer :width="!mobile ? 400 : undefined" temporary v-model="drawer" location="right">
       <v-list>
         <v-list-subheader>Filters</v-list-subheader>
 
-        <v-list-item>
-          <v-list-item-title>Tags</v-list-item-title>
-          <v-list-item-subtitle>Generated metadata describing the keyboard.</v-list-item-subtitle>
-          <v-select class="py-2" :items="KEYBOARD_TAGS" chips multiple clearable density="comfortable" v-model="tags"/>
+        <v-list-item title="Tags">
+          <v-select class="pt-2 mb-n2" :items="KEYBOARD_TAGS" chips multiple clearable density="compact" v-model="tags"/>
         </v-list-item>
 
-        <v-list-item>
-          <v-list-item-title>Features</v-list-item-title>
-          <v-list-item-subtitle>Software/hardware features enabled by the keyboard.</v-list-item-subtitle>
-          <v-select class="py-2" :items="KEYBOARD_FEATURES" chips multiple clearable density="comfortable" v-model="features"/>
+        <v-list-item title="Features">
+          <v-select class="pt-2 mb-n2" :items="KEYBOARD_FEATURES" chips multiple clearable density="compact" v-model="features"/>
         </v-list-item>
 
-        <v-list-item>
-          <v-list-item-title>Layouts</v-list-item-title>
-          <v-list-item-subtitle>Community layouts supported by the keyboard.</v-list-item-subtitle>
-          <v-select class="py-2" :items="KEYBOARD_LAYOUTS" chips multiple clearable density="comfortable" v-model="layouts"/>
+        <v-list-item title="Layouts">
+          <v-select class="pt-2 mb-n2" :items="KEYBOARD_LAYOUTS" chips multiple clearable density="compact" v-model="layouts"/>
         </v-list-item>
 
-        <v-list-item>
-          <v-list-item-title>Converters</v-list-item-title>
-          <v-list-item-subtitle>Supports drop-in replacement controllers.</v-list-item-subtitle>
-          <v-select class="py-2" :items="['promicro', 'elite_c']" chips multiple clearable density="comfortable" v-model="converters"/>
+        <v-list-item title="Converter Support">
+          <v-select class="pt-2 mb-n2" :items="['promicro', 'elite_c']" chips multiple clearable density="compact" v-model="converters"/>
         </v-list-item>
 
         <v-list-item>
