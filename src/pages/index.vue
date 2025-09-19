@@ -1,5 +1,5 @@
 <template>
-  <v-container class="py-8 px-6 h-100" fluid>
+  <v-container class="pt-6 px-6 h-100" fluid>
   
     <h2>All Supported Keyboards</h2>
 
@@ -25,23 +25,25 @@
       </v-btn>
     </v-row>
 
-    <v-navigation-drawer :width="!mobile ? 400 : undefined" temporary v-model="drawer" location="right">
+    <config-panel v-model="drawer" title="Filters">
       <v-list>
-        <v-list-subheader>Filters</v-list-subheader>
-
         <v-list-item title="Tags">
+          <v-list-item-subtitle>Generated metadata describing the keyboard.</v-list-item-subtitle>
           <v-select class="pt-2 mb-n2" :items="KEYBOARD_TAGS" chips multiple clearable density="compact" v-model="tags"/>
         </v-list-item>
 
         <v-list-item title="Features">
+          <v-list-item-subtitle>Software/hardware features enabled by the keyboard.</v-list-item-subtitle>
           <v-select class="pt-2 mb-n2" :items="KEYBOARD_FEATURES" chips multiple clearable density="compact" v-model="features"/>
         </v-list-item>
 
         <v-list-item title="Layouts">
+          <v-list-item-subtitle>Community layouts supported by the keyboard.</v-list-item-subtitle>
           <v-select class="pt-2 mb-n2" :items="KEYBOARD_LAYOUTS" chips multiple clearable density="compact" v-model="layouts"/>
         </v-list-item>
 
         <v-list-item title="Converter Support">
+          <v-list-item-subtitle>Supports drop-in replacement controllers.</v-list-item-subtitle>
           <v-select class="pt-2 mb-n2" :items="['promicro', 'elite_c']" chips multiple clearable density="compact" v-model="converters"/>
         </v-list-item>
 
@@ -49,11 +51,11 @@
           <v-btn variant="tonal" block @click="resetFilter">Reset</v-btn>
         </v-list-item>
       </v-list>
-    </v-navigation-drawer>
+    </config-panel>
 
     <v-sheet border>
       <!-- @vue-expect-error header[].align causing ts errors -->
-      <v-data-table-virtual fixed-header disable-sort height="calc(100vh - 23em)" :loading="!isFinished" striped="even"
+      <v-data-table-virtual fixed-header disable-sort :height="`calc(100dvh - ${mobile ? 19 : 23}em)`" :loading="!isFinished" striped="even"
         :headers="virtualHeaders" :items="virtualKeyboards" item-value="keyboard">
         <template #[`item.keyboard`]="{ item }">
           <v-btn variant="text" :to="`/keyboard/${item.keyboard}`">{{ item.keyboard }}</v-btn>
