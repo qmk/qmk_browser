@@ -6,6 +6,12 @@ export type Keyboard = {
     tags?: string[]
     community_layouts?: string[]
     layouts: Record<string, unknown>;
+    led_matrix?: {
+        layout?: unknown
+    },
+    rgb_matrix?: {
+        layout?: unknown
+    },
     [key: string]: unknown
 };
 
@@ -35,8 +41,14 @@ export const useKeyboards = createGlobalState((): UseFetchReturn<KeyboardMap> & 
                 kb.community_layouts = kb.community_layouts ?? [];
                 kb.tags = [...tags];
 
-                // Remove layout data - reduces case insensitive search from 1400ms to 175ms
+                // Remove layout data - reduces case insensitive search from 1400ms to 100ms
                 kb.layouts = {};
+                if (kb.rgb_matrix && kb.rgb_matrix.layout) {
+                    kb.rgb_matrix.layout = {};
+                }
+                if (kb.led_matrix && kb.led_matrix.layout) {
+                    kb.led_matrix.layout = {};
+                }
             })
             ctx.data = ctx.data.keyboards;
             return ctx;
