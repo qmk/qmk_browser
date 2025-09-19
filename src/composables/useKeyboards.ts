@@ -34,6 +34,9 @@ export const useKeyboards = createGlobalState((): UseFetchReturn<KeyboardMap> & 
 
                 kb.community_layouts = kb.community_layouts ?? [];
                 kb.tags = [...tags];
+
+                // Remove layout data - reduces case insensitive search from 1400ms to 175ms
+                kb.layouts = {};
             })
             ctx.data = ctx.data.keyboards;
             return ctx;

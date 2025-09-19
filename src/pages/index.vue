@@ -47,6 +47,11 @@
           <v-select class="pt-2 mb-n2" :items="['promicro', 'elite_c']" chips multiple clearable density="compact" v-model="converters"/>
         </v-list-item>
 
+        <v-list-item title="Advanced">
+          <v-list-item-subtitle>Additional <a target="_blank" rel="noopener noreferrer" href="https://github.com/gajus/liqe?tab=readme-ov-file#liqe-syntax-cheat-sheet">Liqe</a> query appended to search.</v-list-item-subtitle>
+          <v-text-field class="pt-2 mb-n2" autocomplete="off" clearable density="compact" placeholder="Example: rgb_matrix.led_count:>120" :rules="[liqeValidate]" v-model="raw" @click:clear="raw = ''"/>
+        </v-list-item>
+
         <v-list-item>
           <v-btn variant="tonal" block @click="resetFilter">Reset</v-btn>
         </v-list-item>
@@ -92,13 +97,15 @@ const { data: keyboards, isFinished } = useKeyboards();
 const searchField = ref();
 const search = ref(route.query.search as string);
 
-const searchDebounced = refDebounced(search, 250);
-
 const drawer = ref(false);
 const tags = ref([]);
 const features = ref([]);
 const layouts = ref([]);
 const converters = ref([]);
+const raw = ref('');
+
+const searchDebounced = refDebounced(search, 250);
+const rawDebounced = refDebounced(raw, 500);
 
 useHotkey('ctrl+f', () => {
   searchField.value?.focus();
@@ -109,10 +116,11 @@ const resetFilter = () => {
   features.value = [];
   layouts.value = [];
   converters.value = [];
+  raw.value = '';
 };
 
 const filterCount = computed(() => {
-  return tags.value.length + features.value.length + layouts.value.length + converters.value.length;
+  return tags.value.length + features.value.length + layouts.value.length + converters.value.length + ((raw.value && raw.value.length) ? 1 : 0);
 });
 
 const virtualHeaders = computed(() => {
@@ -139,10 +147,11 @@ const virtualKeyboards = computed<{keyboard: string, firmware: string, folder: s
     ...features.value.map((x) => `features.${x}:true`),
     ...layouts.value.map((x) => `community_layouts:"${x}"`),
     ...converters.value.map((x) => `pin_compatible:"${x}"`),
+    liqeValidate(rawDebounced.value) ? rawDebounced.value : '',
     searchDebounced.value ? `keyboard_folder:"${searchDebounced.value.toLowerCase()}"` : '',
   ];
 
-  const search = terms.join(' ');
+  const search = terms.filter(x => x).join(' ');
   const found = search ? liqe_filter(liqe_parse(search), Object.values(keyboards.value)) : Object.values(keyboards.value);
 
   return found.map((info) => {
@@ -156,6 +165,18 @@ const virtualKeyboards = computed<{keyboard: string, firmware: string, folder: s
     };
   });
 });
+
+const liqeValidate = (value: string) => {
+  if (value && !value.trim()) {
+    return false;
+  }
+  try {
+    liqe_parse(value);
+    return true;
+  } catch {
+    return false;
+  }
+};
 </script>
 
 <style lang="scss">
