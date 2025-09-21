@@ -1,19 +1,19 @@
 <template>
   <v-app>
     <v-app-bar :elevation="2">
-      <template v-slot:prepend>
+      <template #prepend>
         <v-fab-transition>
-          <v-img v-if="$route.path == '/'" :src="`qmk-logo-${mode}.svg`" height="32px" width="48px" position="right"/>
+          <v-img v-if="$route.path == '/'" :src="`qmk-logo-${mode}.svg`" height="32px" width="48px" position="right" />
           <v-btn v-else to="/" icon="fa-solid fa-arrow-left" />
         </v-fab-transition>
       </template>
 
       <v-app-bar-title>QMK Keyboards</v-app-bar-title>
 
-      <template v-slot:append>
-        <v-switch class="d-none d-sm-flex" inset true-icon="fa-regular fa-moon" false-icon="fa-regular fa-sun"
-          true-value="dark" false-value="light" theme="light" v-model="mode" />
-          <v-divider class="mx-2 my-4 d-none d-md-flex" vertical />
+      <template #append>
+        <v-switch v-model="mode" class="d-none d-sm-flex" inset true-icon="fa-regular fa-moon"
+                  false-icon="fa-regular fa-sun" true-value="dark" false-value="light" theme="light" />
+        <v-divider class="mx-2 my-4 d-none d-md-flex" vertical />
         <v-btn class="d-none d-md-flex" size="small" href="https://discord.gg/qmk" icon="fa-brands fa-discord" />
         <v-btn class="d-none d-md-flex" size="small" href="https://github.com/qmk/qmk_browser" icon="fa-brands fa-github" />
       </template>

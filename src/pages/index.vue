@@ -9,18 +9,13 @@
     </p>
 
     <v-row no-gutters>
-      <v-text-field ref="searchField" density="comfortable" min-width="50%"
-      class="py-2" v-model="search" label="Search" prepend-inner-icon="fa-solid fa-search" variant="outlined"
-      hide-details single-line clearable/>
-      <v-spacer></v-spacer>
-      <v-btn class="my-2" size="large" variant="tonal" prepend-icon="fa-solid fa-filter" @click="drawer=true" :disabled="!isFinished">
+      <v-text-field ref="searchField" v-model="search" density="comfortable" hide-details single-line clearable
+                    min-width="50%" class="py-2" label="Search" prepend-inner-icon="fa-solid fa-search" variant="outlined" />
+      <v-spacer />
+      <v-btn class="my-2" size="large" variant="tonal" prepend-icon="fa-solid fa-filter" :disabled="!isFinished" @click="drawer=true">
         <span v-if="!mobile">Filter</span>
-        <template v-slot:append v-if="filterCount">
-          <v-badge
-            color="orange"
-            :content="filterCount"
-            inline
-          ></v-badge>
+        <template v-if="filterCount" #append>
+          <v-badge color="orange" :content="filterCount" inline />
         </template>
       </v-btn>
     </v-row>
@@ -29,27 +24,27 @@
       <v-list>
         <v-list-item title="Tags">
           <v-list-item-subtitle>Generated metadata describing the keyboard.</v-list-item-subtitle>
-          <v-select class="pt-2 mb-n2" :items="KEYBOARD_TAGS" chips multiple clearable density="compact" v-model="tags"/>
+          <v-select v-model="tags" class="pt-2 mb-n2" :items="KEYBOARD_TAGS" chips multiple clearable density="compact" />
         </v-list-item>
 
         <v-list-item title="Features">
           <v-list-item-subtitle>Software/hardware features enabled by the keyboard.</v-list-item-subtitle>
-          <v-select class="pt-2 mb-n2" :items="KEYBOARD_FEATURES" chips multiple clearable density="compact" v-model="features"/>
+          <v-select v-model="features" class="pt-2 mb-n2" :items="KEYBOARD_FEATURES" chips multiple clearable density="compact" />
         </v-list-item>
 
         <v-list-item title="Layouts">
           <v-list-item-subtitle>Community layouts supported by the keyboard.</v-list-item-subtitle>
-          <v-select class="pt-2 mb-n2" :items="KEYBOARD_LAYOUTS" chips multiple clearable density="compact" v-model="layouts"/>
+          <v-select v-model="layouts" class="pt-2 mb-n2" :items="KEYBOARD_LAYOUTS" chips multiple clearable density="compact" />
         </v-list-item>
 
         <v-list-item title="Converter Support">
           <v-list-item-subtitle>Supports drop-in replacement controllers.</v-list-item-subtitle>
-          <v-select class="pt-2 mb-n2" :items="['promicro', 'elite_c']" chips multiple clearable density="compact" v-model="converters"/>
+          <v-select v-model="converters" class="pt-2 mb-n2" :items="['promicro', 'elite_c']" chips multiple clearable density="compact" />
         </v-list-item>
 
         <v-list-item title="Advanced">
           <v-list-item-subtitle>Additional <a target="_blank" rel="noopener noreferrer" href="https://github.com/gajus/liqe?tab=readme-ov-file#liqe-syntax-cheat-sheet">Liqe</a> query appended to search.</v-list-item-subtitle>
-          <v-text-field class="pt-2 mb-n2" autocomplete="off" clearable density="compact" placeholder="Example: rgb_matrix.led_count:>120" :rules="[liqeValidate]" v-model="raw" @click:clear="raw = ''"/>
+          <v-text-field v-model="raw" class="pt-2 mb-n2" autocomplete="off" clearable density="compact" placeholder="Example: rgb_matrix.led_count:>120" :rules="[liqeValidate]" @click:clear="raw = ''" />
         </v-list-item>
 
         <v-list-item>
@@ -61,7 +56,7 @@
     <v-sheet border>
       <!-- @vue-expect-error header[].align causing ts errors -->
       <v-data-table-virtual fixed-header disable-sort :height="`calc(100dvh - ${mobile ? 19 : 23}em)`" :loading="!isFinished" striped="even"
-        :headers="virtualHeaders" :items="virtualKeyboards" item-value="keyboard">
+                            :headers="virtualHeaders" :items="virtualKeyboards" item-value="keyboard">
         <template #[`item.keyboard`]="{ item }">
           <v-btn variant="text" :to="`/keyboard/${item.keyboard}`">{{ item.keyboard }}</v-btn>
         </template>
@@ -69,7 +64,7 @@
           <v-btn variant="text" icon="fa-brands fa-github" :href="item.folder" />
         </template>
         <template #[`item.firmware`]="{ item }">
-          <v-btn variant="text" icon="fa-solid fa-download" :href="item.firmware" v-if="item.firmware" />
+          <v-btn v-if="item.firmware" variant="text" icon="fa-solid fa-download" :href="item.firmware" />
         </template>
       </v-data-table-virtual>
     </v-sheet>

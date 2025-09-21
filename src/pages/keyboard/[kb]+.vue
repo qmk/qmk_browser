@@ -7,16 +7,16 @@
     </v-banner>
 
     <v-row no-gutters class="py-4">
-      <v-spacer/>
+      <v-spacer />
       <v-btn class="ml-4" color="primary" variant="elevated" prepend-icon="fa-brands fa-github"
-        :href="`https://github.com/qmk/qmk_firmware/tree/master/keyboards/${keyboard}`">QMK</v-btn>
-      <v-btn class="ml-4" color="orange" variant="elevated" prepend-icon="fa-solid fa-download"
-        :href="url" v-if="url">Firmware</v-btn>
+             :href="`https://github.com/qmk/qmk_firmware/tree/master/keyboards/${keyboard}`">QMK</v-btn>
+      <v-btn v-if="url" class="ml-4" color="orange" variant="elevated"
+             prepend-icon="fa-solid fa-download" :href="url">Firmware</v-btn>
     </v-row>
 
     <!-- TODO: actual keyboard image -->
     <div class="text-center">
-      <v-icon size=300>fa-regular fa-keyboard</v-icon>
+      <v-icon size="300">fa-regular fa-keyboard</v-icon>
     </div>
   
     <!-- <p>TODO: description</p> -->
