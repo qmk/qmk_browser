@@ -2,8 +2,8 @@ import { useFetch, UseFetchReturn, createGlobalState } from '@vueuse/core';
 import { CI_BASE_URL } from '@/constants';
 
 export type FirmwareItem = {
-  url: string,
-  filename: string,
+  url: string;
+  filename: string;
 };
 
 export type FirmwareList = Record<string, FirmwareItem>;

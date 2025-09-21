@@ -1,18 +1,20 @@
 import { useFetch, UseFetchReturn, createGlobalState } from '@vueuse/core';
 import { API_BASE_URL } from '@/constants';
 
+const LAYOUT_TAGS = ['ortho', 'ansi', 'iso', '60', '65', '75', '96', 'alice', 'fullsize', 'tkl', 'numpad'];
+
 export type Keyboard = {
-    keyboard_folder: string,
-    tags?: string[]
-    community_layouts?: string[]
+    keyboard_folder: string;
+    tags?: string[];
+    community_layouts?: string[];
     layouts: Record<string, unknown>;
     led_matrix?: {
-        layout?: unknown
-    },
+        layout?: unknown;
+    };
     rgb_matrix?: {
-        layout?: unknown
-    },
-    [key: string]: unknown
+        layout?: unknown;
+    };
+    [key: string]: unknown;
 };
 
 export type KeyboardMap = Record<string, Keyboard>;
@@ -27,7 +29,7 @@ export const useKeyboards = createGlobalState((): UseFetchReturn<KeyboardMap> & 
                 const tags = new Set(kb.tags ?? []);
 
                 Object.keys(kb.layouts).forEach((layout) => {
-                    for (const token of ['ortho', 'ansi', 'iso', '60', '65', '75', '96', 'alice', 'fullsize', 'tkl', 'numpad']) {
+                    for (const token of LAYOUT_TAGS) {
                         if (layout.includes(token)) {
                             tags.add(token);
                         }

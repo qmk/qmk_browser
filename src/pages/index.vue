@@ -176,7 +176,6 @@ const liqeValidate = (value: string) => {
 
 <style lang="scss">
 .v-field--variant-outlined.v-field--focused .v-field__outline {
-
   .v-field__outline__start,
   .v-field__outline__end {
     border-color: rgb(var(--v-theme-primary));
