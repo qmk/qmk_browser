@@ -1,28 +1,32 @@
-export const API_BASE_URL = "https://keyboards.qmk.fm/v1";
-export const CI_BASE_URL = "https://ci.qmk.fm/master/latest";
+export const API_BASE_URL = 'https://keyboards.qmk.fm/v1';
+export const CI_BASE_URL = 'https://ci.qmk.fm/master/latest';
 
 export const KEYBOARD_TAGS = [
-    "ortho",
-    "ansi",
-    "iso",
-    "60",
-    "65",
-    "75",
-    "96",
-    "alice",
-    "fullsize",
-    "tkl",
-    "numpad",
-    "split",
+    'ortho',
+    'ansi',
+    'iso',
+    '60',
+    '65',
+    '75',
+    '96',
+    'alice',
+    'fullsize',
+    'tkl',
+    'numpad',
+    'split',
 ];
 
 export const KEYBOARD_FEATURES = [
-    "audio",
-    "backlight",
-    "encoder",
-    "led_matrix",
-    "rgb_matrix",
-    "rgblight",
+    'audio',
+    'backlight',
+    'bluetooth',
+    'dip_switch',
+    'encoder',
+    'led_matrix',
+    'oled',
+    'pointing_device',
+    'rgb_matrix',
+    'rgblight',
 ];
 
 export const KEYBOARD_LAYOUTS = [

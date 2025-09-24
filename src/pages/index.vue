@@ -24,7 +24,7 @@
       <v-list>
         <v-list-item title="Tags">
           <v-list-item-subtitle>Generated metadata describing the keyboard.</v-list-item-subtitle>
-          <v-select v-model="tags" class="pt-2 mb-n2" :items="KEYBOARD_TAGS" chips multiple clearable density="compact" />
+          <v-select v-model="tags" class="pt-2 mb-n2" :items="tagItems" chips multiple clearable density="compact" />
         </v-list-item>
 
         <v-list-item title="Features">
@@ -113,6 +113,10 @@ const resetFilter = () => {
   converters.value = [];
   raw.value = '';
 };
+
+const tagItems = computed(() => {
+  return KEYBOARD_TAGS.map(tag => ({ title: +tag ? `${tag}%` : tag, value: tag}));
+});
 
 const filterCount = computed(() => {
   return tags.value.length + features.value.length + layouts.value.length + converters.value.length + ((raw.value && raw.value.length) ? 1 : 0);
