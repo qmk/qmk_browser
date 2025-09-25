@@ -9,13 +9,13 @@
     </p>
 
     <v-row no-gutters>
-      <v-text-field ref="searchField" v-model="search" density="comfortable" hide-details single-line clearable
+      <v-text-field ref="searchNode" v-model="search" density="comfortable" hide-details single-line clearable
                     min-width="50%" class="py-2" label="Search" prepend-inner-icon="fa-solid fa-search" variant="outlined" />
       <v-spacer />
       <v-btn class="my-2" size="large" variant="tonal" prepend-icon="fa-solid fa-filter" :disabled="!isFinished" @click="drawer=true">
         <span v-if="!mobile">Filter</span>
-        <template v-if="filterCount" #append>
-          <v-badge color="orange" :content="filterCount" inline />
+        <template v-if="filter.count" #append>
+          <v-badge color="orange" :content="filter.count" inline />
         </template>
       </v-btn>
     </v-row>
@@ -23,32 +23,47 @@
     <config-panel v-model="drawer" title="Filters">
       <v-list>
         <v-list-item title="Tags">
-          <v-list-item-subtitle>Generated metadata describing the keyboard.</v-list-item-subtitle>
-          <v-select v-model="tags" class="pt-2 mb-n2" :items="tagItems" chips multiple clearable density="compact" />
+          <v-list-item-subtitle>Metadata describing the keyboard.</v-list-item-subtitle>
+          <v-select v-model="filter.tags" class="pt-2" :items="tagItems" hide-details chips multiple clearable density="compact" />
         </v-list-item>
 
         <v-list-item title="Features">
-          <v-list-item-subtitle>Software/hardware features enabled by the keyboard.</v-list-item-subtitle>
-          <v-select v-model="features" class="pt-2 mb-n2" :items="KEYBOARD_FEATURES" chips multiple clearable density="compact" />
+          <v-list-item-subtitle>Enabled Software/hardware features.</v-list-item-subtitle>
+          <v-select v-model="filter.features" class="pt-2" :items="KEYBOARD_FEATURES" hide-details chips multiple clearable density="compact" />
         </v-list-item>
 
         <v-list-item title="Layouts">
-          <v-list-item-subtitle>Community layouts supported by the keyboard.</v-list-item-subtitle>
-          <v-select v-model="layouts" class="pt-2 mb-n2" :items="KEYBOARD_LAYOUTS" chips multiple clearable density="compact" />
+          <v-list-item-subtitle>Supports community layouts.</v-list-item-subtitle>
+          <v-select v-model="filter.layouts" class="pt-2" :items="KEYBOARD_LAYOUTS" hide-details chips multiple clearable density="compact" />
+        </v-list-item>
+
+        <v-list-item title="Keys">
+          <v-list-item-subtitle>Number of keys defined within layout.</v-list-item-subtitle>
+          <v-number-input v-model="filter.keys" class="pt-2" :min="1" hide-details clearable density="compact" />
+        </v-list-item>
+
+        <v-list-item title="Development Boards">
+          <v-list-item-subtitle>Configures controller preset.</v-list-item-subtitle>
+          <v-select v-model="filter.board" class="pt-2" :items="DEVELOPMENT_BOARDS" hide-details chips clearable density="compact" />
         </v-list-item>
 
         <v-list-item title="Converter Support">
           <v-list-item-subtitle>Supports drop-in replacement controllers.</v-list-item-subtitle>
-          <v-select v-model="converters" class="pt-2 mb-n2" :items="['promicro', 'elite_c']" chips multiple clearable density="compact" />
+          <v-select v-model="filter.converter" class="pt-2" :items="CONVERTER_BASE" hide-details chips clearable density="compact" />
         </v-list-item>
 
         <v-list-item title="Advanced">
-          <v-list-item-subtitle>Additional <a target="_blank" rel="noopener noreferrer" href="https://github.com/gajus/liqe?tab=readme-ov-file#liqe-syntax-cheat-sheet">Liqe</a> query appended to search.</v-list-item-subtitle>
-          <v-text-field v-model="raw" class="pt-2 mb-n2" autocomplete="off" clearable density="compact" placeholder="Example: rgb_matrix.led_count:>120" :rules="[liqeValidate]" @click:clear="raw = ''" />
+          <v-list-item-subtitle>Append raw <a target="_blank" rel="noopener noreferrer" :href="LIQE_URL">Liqe</a> query to search. Examples:</v-list-item-subtitle>
+          <ul class="pl-6 ma-1 text-caption text-medium-emphasis">
+            <li>layouts.key_count:[100 TO 200]</li>
+            <li>rgb_matrix.led_count:&gt;120</li>
+            <li>split.serial.driver:usart</li>
+          </ul>
+          <v-text-field v-model="filter.raw" class="pt-2" hide-details autocomplete="off" clearable density="compact":rules="[liqeValidate]" />
         </v-list-item>
 
         <v-list-item>
-          <v-btn variant="tonal" block @click="resetFilter">Reset</v-btn>
+          <v-btn variant="tonal" block @click="filter.$reset()">Reset</v-btn>
         </v-list-item>
       </v-list>
     </config-panel>
@@ -77,11 +92,15 @@ import { useRoute } from 'vue-router';
 import { refDebounced } from '@vueuse/core';
 import { useHotkey, useDisplay } from 'vuetify';
 import { filter as liqe_filter, parse as liqe_parse } from 'liqe';
+import { storeToRefs } from 'pinia';
 
-import { KEYBOARD_TAGS, KEYBOARD_FEATURES, KEYBOARD_LAYOUTS } from '@/constants';
+import { KEYBOARD_TAGS, KEYBOARD_FEATURES, KEYBOARD_LAYOUTS, DEVELOPMENT_BOARDS, CONVERTER_BASE } from '@/constants';
 
-import { useKeyboards } from '@/composables/useKeyboards';
+import { KeyboardMap, useKeyboards } from '@/composables/useKeyboards';
 import { useFirmwareList, toFirmwareListKey } from '@/composables/useFirmwareList';
+import { useFilterStore } from '@/stores/useFilterStore';
+
+const LIQE_URL = 'https://github.com/gajus/liqe?tab=readme-ov-file#liqe-syntax-cheat-sheet';
 
 const route = useRoute();
 const { smAndDown:mobile } = useDisplay();
@@ -89,37 +108,22 @@ const { smAndDown:mobile } = useDisplay();
 const { data: firmwareFiles } = await useFirmwareList();
 const { data: keyboards, isFinished } = useKeyboards();
 
-const searchField = ref();
+const filter = useFilterStore();
+
+const searchNode = ref();
 const search = ref(route.query.search as string);
 
 const drawer = ref(false);
-const tags = ref([]);
-const features = ref([]);
-const layouts = ref([]);
-const converters = ref([]);
-const raw = ref('');
 
-const searchDebounced = refDebounced(search, 250);
-const rawDebounced = refDebounced(raw, 500);
+const searchDebounced = refDebounced<string>(search, 250);
+const rawDebounced = refDebounced<string | null>(storeToRefs(filter).raw, 500);
 
 useHotkey('ctrl+f', () => {
-  searchField.value?.focus();
+  searchNode.value?.focus();
 });
-
-const resetFilter = () => {
-  tags.value = [];
-  features.value = [];
-  layouts.value = [];
-  converters.value = [];
-  raw.value = '';
-};
 
 const tagItems = computed(() => {
   return KEYBOARD_TAGS.map(tag => ({ title: +tag ? `${tag}%` : tag, value: tag}));
-});
-
-const filterCount = computed(() => {
-  return tags.value.length + features.value.length + layouts.value.length + converters.value.length + ((raw.value && raw.value.length) ? 1 : 0);
 });
 
 const virtualHeaders = computed(() => {
@@ -141,18 +145,7 @@ const virtualKeyboards = computed<{keyboard: string, firmware: string, folder: s
     return [];
   }
 
-  const terms: string[] = [
-    ...tags.value.map((x) => `tags:"${x}"`),
-    ...features.value.map((x) => `features.${x}:true`),
-    ...layouts.value.map((x) => `community_layouts:"${x}"`),
-    ...converters.value.map((x) => `pin_compatible:"${x}"`),
-    liqeValidate(rawDebounced.value) ? rawDebounced.value : '',
-    searchDebounced.value ? `keyboard_folder:"${searchDebounced.value.toLowerCase()}"` : '',
-  ];
-
-  const search = terms.filter(x => x).join(' ');
-  const found = search ? liqe_filter(liqe_parse(search), Object.values(keyboards.value)) : Object.values(keyboards.value);
-
+  const found = filterKeyboards(keyboards.value);
   return found.map((info) => {
     const kb = info.keyboard_folder;
     const fm = firmwareFiles.value![toFirmwareListKey(kb)];
@@ -164,6 +157,24 @@ const virtualKeyboards = computed<{keyboard: string, firmware: string, folder: s
     };
   });
 });
+
+const filterKeyboards = (keyboards:KeyboardMap) => {
+  const terms: string[] = [
+    ...filter.tags.map((x) => `tags:"${x}"`),
+    ...filter.features.map((x) => `features.${x}:true`),
+    ...filter.layouts.map((x) => `community_layouts:"${x}"`),
+    filter.keys ? `layouts.key_count:=${filter.keys}` : '',
+    filter.board ? `development_board:"${filter.board}"` : '',
+    filter.converter ? `pin_compatible:"${filter.converter}"` : '',
+    rawDebounced.value && liqeValidate(rawDebounced.value) ? rawDebounced.value : '',
+    searchDebounced.value ? `keyboard_folder:"${searchDebounced.value.toLowerCase()}"` : '',
+  ];
+
+  const search = terms.filter(x => x).join(' ');
+  
+  const values = Object.values(keyboards);
+  return search ? liqe_filter(liqe_parse(search), values) : values;
+};
 
 const liqeValidate = (value: string) => {
   if (value && !value.trim()) {

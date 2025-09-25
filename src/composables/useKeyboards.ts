@@ -44,7 +44,7 @@ export const useKeyboards = createGlobalState((): UseFetchReturn<KeyboardMap> & 
                 kb.tags = [...tags];
 
                 // Remove layout data - reduces case insensitive search from 1400ms to 100ms
-                kb.layouts = {};
+                kb.layouts = {key_count: Object.values(kb.layouts).map(l => (l as { layout: unknown[]}).layout.length)};
                 if (kb.rgb_matrix && kb.rgb_matrix.layout) {
                     kb.rgb_matrix.layout = {};
                 }

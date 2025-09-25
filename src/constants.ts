@@ -137,3 +137,26 @@ export const KEYBOARD_LAYOUTS = [
     'tkl_nofrow_ansi',
     'tkl_nofrow_iso',
 ];
+
+export const DEVELOPMENT_BOARDS = [
+    'promicro',
+    'elite_c',
+    'elite_pi',
+    'proton_c',
+    'kb2040',
+    'promicro_rp2040',
+    'blok',
+    'michi',
+    'bit_c_pro',
+    'stemcell',
+    'bluepill',
+    'blackpill_f401',
+    'blackpill_f411',
+    'bonsai_c4',
+    'helios',
+    'liatris',
+    'imera',
+    'svlinky',
+];
+
+export const CONVERTER_BASE = ['promicro', 'elite_c'];
