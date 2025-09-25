@@ -177,7 +177,10 @@ const filterKeyboards = (keyboards:KeyboardMap) => {
 };
 
 const liqeValidate = (value: string) => {
-  if (value && !value.trim()) {
+  if (value === null) {
+    return true;
+  }
+  if (!value.trim()) {
     return false;
   }
   try {
