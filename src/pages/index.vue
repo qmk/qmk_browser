@@ -9,7 +9,7 @@
     </p>
 
     <v-row no-gutters>
-      <v-text-field ref="searchNode" v-model="search" density="comfortable" hide-details single-line clearable
+      <v-text-field ref="searchNode" v-model="search.term" density="comfortable" hide-details single-line clearable
                     min-width="50%" class="py-2" label="Search" prepend-inner-icon="fa-solid fa-search" variant="outlined" />
       <v-spacer />
       <v-btn class="my-2" size="large" variant="tonal" prepend-icon="fa-solid fa-filter" :disabled="!isFinished" @click="drawer=true">
@@ -59,11 +59,11 @@
             <li>rgb_matrix.led_count:&gt;120</li>
             <li>split.serial.driver:usart</li>
           </ul>
-          <v-text-field v-model="filter.raw" class="pt-2" hide-details autocomplete="off" clearable density="compact":rules="[liqeValidate]" />
+          <v-text-field v-model="filter.raw" class="pt-2" hide-details autocomplete="off" clearable density="compact" :rules="[liqeValidate]" />
         </v-list-item>
 
         <v-list-item>
-          <v-btn variant="tonal" block @click="filter.$reset()">Reset</v-btn>
+          <v-btn variant="tonal" block prepend-icon="fa-solid fa-undo" @click="filter.$reset()">Reset</v-btn>
         </v-list-item>
       </v-list>
     </config-panel>
@@ -87,7 +87,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref } from 'vue';
+import { computed, ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { refDebounced } from '@vueuse/core';
 import { useHotkey, useDisplay } from 'vuetify';
@@ -99,6 +99,7 @@ import { KEYBOARD_TAGS, KEYBOARD_FEATURES, KEYBOARD_LAYOUTS, DEVELOPMENT_BOARDS,
 import { KeyboardMap, useKeyboards } from '@/composables/useKeyboards';
 import { useFirmwareList, toFirmwareListKey } from '@/composables/useFirmwareList';
 import { useFilterStore } from '@/stores/useFilterStore';
+import { useSearchStore } from '@/stores/useSearchStore';
 
 const LIQE_URL = 'https://github.com/gajus/liqe?tab=readme-ov-file#liqe-syntax-cheat-sheet';
 
@@ -108,14 +109,14 @@ const { smAndDown:mobile } = useDisplay();
 const { data: firmwareFiles } = await useFirmwareList();
 const { data: keyboards, isFinished } = useKeyboards();
 
+const search = useSearchStore();
 const filter = useFilterStore();
 
 const searchNode = ref();
-const search = ref(route.query.search as string);
 
 const drawer = ref(false);
 
-const searchDebounced = refDebounced<string>(search, 250);
+const searchDebounced = refDebounced<string>(storeToRefs(search).term, 250);
 const rawDebounced = refDebounced<string | null>(storeToRefs(filter).raw, 500);
 
 useHotkey('ctrl+f', () => {
@@ -190,6 +191,12 @@ const liqeValidate = (value: string) => {
     return false;
   }
 };
+
+onMounted(() => {
+  if (route.query.search) {
+    search.term = route.query.search as string;
+  }
+});
 </script>
 
 <style lang="scss">

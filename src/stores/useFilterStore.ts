@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 
-export const useFilterStore = defineStore('search', {
+export const useFilterStore = defineStore('filter', {
     state: () => ({
         tags: [],
         features: [],
