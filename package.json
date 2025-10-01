@@ -32,7 +32,7 @@
     "jiti": "^2.5.1",
     "sass": "^1.92.1",
     "typescript": "^5.9.2",
-    "typescript-eslint": "^8.43.0",
+    "typescript-eslint": "^8.45.0",
     "unplugin-fonts": "^1.4.0",
     "unplugin-vue-components": "^29.0.0",
     "unplugin-vue-router": "^0.15.0",
