@@ -153,7 +153,7 @@ const virtualKeyboards = computed<{keyboard: string, firmware: string, folder: s
 
     return {
       keyboard: kb,
-      firmware: fm.url ?? '',
+      firmware: (fm && fm.url) ? fm.url : '',
       folder: `https://github.com/qmk/qmk_firmware/tree/master/keyboards/${kb}`,
     };
   });
