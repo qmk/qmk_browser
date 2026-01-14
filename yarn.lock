@@ -1504,10 +1504,10 @@ levn@^0.4.1:
     prelude-ls "^1.2.1"
     type-check "~0.4.0"
 
-liqe@^3.8.3:
-  version "3.8.3"
-  resolved "https://registry.yarnpkg.com/liqe/-/liqe-3.8.3.tgz#2f01a83119a99d165c987bf54d2797f6561bfb76"
-  integrity sha512-kjx7gTyYuhhw5b0KMP2DP8fxVPMr29L4B8pjdAN0t/saJejlIw5GpBldz5EeKaHtsrKlOnj6hjpsoXDfxnEtpQ==
+liqe@^3.8.4:
+  version "3.8.4"
+  resolved "https://registry.yarnpkg.com/liqe/-/liqe-3.8.4.tgz#c73039265308991b77523d149ad60568136ff5ad"
+  integrity sha512-ruUnzKq8FyTIJKhO2wr2qBr/Ga0qgMzXVbJ8il9Xd4VYAMwmwWStonJa6irUkoOG5rmghL5WHBSQ6EKkoMrzUQ==
   dependencies:
     nearley "^2.20.1"
     ts-error "^1.0.6"
