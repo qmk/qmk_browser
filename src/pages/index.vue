@@ -73,7 +73,7 @@
       <v-data-table-virtual fixed-header disable-sort :height="`calc(100dvh - ${mobile ? 19 : 23}em)`" :loading="!isFinished" striped="even"
                             :headers="virtualHeaders" :items="virtualKeyboards" item-value="keyboard">
         <template #[`item.keyboard`]="{ item }">
-          <v-btn variant="text" :to="`/keyboard/${item.keyboard}`">{{ item.keyboard }}</v-btn>
+          <v-btn variant="text" class="text-lowercase" :to="`/keyboard/${item.keyboard}`">{{ item.keyboard }}</v-btn>
         </template>
         <template #[`item.folder`]="{ item }">
           <v-btn variant="text" icon="fa-brands fa-github" :href="item.folder" />
